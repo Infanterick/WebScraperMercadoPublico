@@ -7,6 +7,8 @@
 #
 ############################################################
 
+from datetime import date
+
 import requests
 import pandas as pd
 import zipfile
@@ -177,25 +179,22 @@ def guardar_excel(licitaciones, licitaciones_maule):
                         for c_idx, value in enumerate(row, 1):
                             ws.cell(row=r_idx, column=c_idx, value=value)
 
-            v = 1
-
             # Eliminar el archivo ZIP descargado
             zip_path = DOWNLOAD_DIR / "licitaciones.zip"
             if zip_path.exists():
                 zip_path.unlink()
 
-            # Guardar el workbook en un archivo Excel
-            archivo_salida = f"C://Users//{os.getlogin()}//Downloads//licitaciones - {today.strftime('%d-%m-%Y')} - {v}.xlsx"
 
-            if Path(archivo_salida).exists():
+            # Guardar el workbook en un archivo Excel
+            v = 1
+            while Path(f'C://Users//{os.getlogin()}//Downloads//licitaciones - {date.today().strftime('%d-%m-%Y')} - {v}.xlsx').exists():
                 v += 1
-                archivo_salida = f"C://Users//{os.getlogin()}//Downloads//licitaciones - {today.strftime('%d-%m-%Y')} - {v}.xlsx"
+            archivo_salida = Path(f'C://Users//{os.getlogin()}//Downloads//licitaciones - {date.today().strftime('%d-%m-%Y')} - {v}.xlsx')
 
             wb.save(archivo_salida)
-            print(f"Archivo guardado: {archivo_salida}")
             logger.info(f"Archivo guardado: {archivo_salida}")
         else:
-            print("Operación cancelada por el usuario")
+            logger.info("Operación cancelada por el usuario")
     except Exception as e:
         logger.error(
             f"Error al guardar el archivo Excel: {e} | traceback: {traceback.format_exc()}"
@@ -213,7 +212,7 @@ def main():
         logger.error(
             f"Error en el proceso principal: {e} | traceback: {traceback.format_exc()}"
         )
-        print("Ocurrió un error durante el proceso. Revisa el log para más detalles.")
+        logger.info("Ocurrió un error durante el proceso. Revisa el log para más detalles.")
 
 
 if __name__ == "__main__":

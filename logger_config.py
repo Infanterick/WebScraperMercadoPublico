@@ -1,4 +1,4 @@
-import logging
+import logging, sys
 
 
 def setup_logger():
@@ -13,5 +13,12 @@ def setup_logger():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     logger.addHandler(handler)
+
+
+
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(logging.Formatter('%(levelname)s | %(message)s | %(asctime)s'))
+    logger.addHandler(console_handler)
 
     return logger
