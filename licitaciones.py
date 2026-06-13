@@ -17,6 +17,7 @@ from tkinter.simpledialog import askstring
 from tkinter import Tk
 import re
 from pathlib import Path
+import os
 
 from logger_config import setup_logger
 import traceback
@@ -184,14 +185,11 @@ def guardar_excel(licitaciones, licitaciones_maule):
                 zip_path.unlink()
 
             # Guardar el workbook en un archivo Excel
-            archivo_salida = (
-                DOWNLOAD_DIR / f"licitaciones - {today.strftime('%d-%m-%Y')} - {v}.xlsx"
-            )
+            archivo_salida = f"C://Users//{os.getlogin()}//Downloads//licitaciones - {today.strftime('%d-%m-%Y')} - {v}.xlsx"
+
             if Path(archivo_salida).exists():
                 v += 1
-                archivo_salida = (
-                    f"licitaciones - {today.strftime('%d-%m-%Y')} - {v}.xlsx"
-                )
+                archivo_salida = f"C://Users//{os.getlogin()}//Downloads//licitaciones - {today.strftime('%d-%m-%Y')} - {v}.xlsx"
 
             wb.save(archivo_salida)
             print(f"Archivo guardado: {archivo_salida}")
