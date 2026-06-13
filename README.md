@@ -26,7 +26,7 @@ Este proyecto automatiza la recopilación de datos de licitaciones públicas dis
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/Infanterick/MercadoPublico.git
+git clone https://github.com/Infanterick/WebScraperMercadoPublico.git
 cd MercadoPublico
 ```
 
@@ -34,8 +34,7 @@ cd MercadoPublico
 
 **En Windows:**
 ```bash
-python -m venv venv
-venv\Scripts\activate
+uv venv
 ```
 
 **En macOS/Linux:**
@@ -47,12 +46,12 @@ source venv/bin/activate
 ### 3. Instalar dependencias
 
 ```bash
-pip install -e .
+uv sync
 ```
 
 O instalar las dependencias manualmente:
 ```bash
-pip install pandas>=3.0.3 requests>=2.34.2 openpyxl>=3.1.5
+uv pip install pandas>=3.0.3 requests>=2.34.2 openpyxl>=3.1.5
 ```
 
 ## Uso
@@ -60,7 +59,7 @@ pip install pandas>=3.0.3 requests>=2.34.2 openpyxl>=3.1.5
 ### Ejecución básica
 
 ```bash
-python licitaciones.py
+uv run licitaciones.py
 ```
 
 El script realizará las siguientes acciones:
@@ -170,9 +169,6 @@ Incluye:
 **Erick Infante**  
 Fecha de inicio: 30-05-2026
 
-## Licencia
-
-Este proyecto está disponible bajo licencia MIT.
 
 ## Contribuciones
 
