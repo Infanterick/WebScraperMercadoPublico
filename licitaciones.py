@@ -27,17 +27,17 @@ import traceback
 logger = setup_logger()
 
 # URL del archivo a descargar
-url = "https://www.mercadopublico.cl/Portal/att.ashx?id=5"
+url: str = "https://www.mercadopublico.cl/Portal/att.ashx?id=5"
 
-BASE_DIR = Path(__file__).parent
-DOWNLOAD_DIR = BASE_DIR / "downloads"
+BASE_DIR: Path = Path(__file__).parent
+DOWNLOAD_DIR: Path = BASE_DIR / "downloads"
 DOWNLOAD_DIR.mkdir(exist_ok=True)
 
-today = pd.Timestamp.today()
+today: pd.Timestamp = pd.Timestamp.today()
 
 
 # Función para descargar y descomprimir el archivo
-def descargar_y_descomprimir(url, destfile, exdir):
+def descargar_y_descomprimir(url: str, destfile: str, exdir: Path) -> None:
     """
     Descarga un archivo ZIP y lo descomprime
     """
@@ -53,6 +53,7 @@ def descargar_y_descomprimir(url, destfile, exdir):
         # Descomprimir el archivo ZIP
         with zipfile.ZipFile(destfile, "r") as zip_ref:
             zip_ref.extractall(exdir)
+
     except Exception as e:
         logger.error(
             f"Error al descargar o descomprimir el archivo: {e} | traceback: {traceback.format_exc()}"
@@ -61,7 +62,7 @@ def descargar_y_descomprimir(url, destfile, exdir):
 
 
 # Función para eliminar acentos
-def remove_accents(text):
+def remove_accents(text: str) -> str:
     """
     Elimina acentos del texto
     """
@@ -71,6 +72,7 @@ def remove_accents(text):
             text = unicodedata.normalize("NFKD", text)
             text = "".join([c for c in text if not unicodedata.combining(c)])
         return text
+
     except Exception as e:
         logger.error(
             f"Error al eliminar acentos: {e} | traceback: {traceback.format_exc()}"
@@ -78,7 +80,7 @@ def remove_accents(text):
         raise
 
 
-def manejo_datos():
+def manejo_datos() -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     Maneja los datos de licitaciones: descarga, descomprime, lee el Excel, limpia y filtra los datos.
     """
@@ -90,7 +92,7 @@ def manejo_datos():
         )
 
         # Leer el archivo Excel descomprimido, omitiendo las primeras 7 filas
-        licitaciones = pd.read_excel(
+        licitaciones: pd.DataFrame = pd.read_excel(
             DOWNLOAD_DIR / "licitaciones" / "Licitacion_Publicada.xlsx", skiprows=7
         )
 
@@ -113,7 +115,7 @@ def manejo_datos():
         licitaciones = licitaciones[licitaciones["Fecha Cierre"] > today]
 
         # Filtrar por región
-        licitaciones_maule = licitaciones[
+        licitaciones_maule: pd.DataFrame = licitaciones[
             licitaciones["Region Compradora"].str.contains("Maule")
         ]
 
@@ -184,12 +186,15 @@ def guardar_excel(licitaciones, licitaciones_maule):
             if zip_path.exists():
                 zip_path.unlink()
 
-
             # Guardar el workbook en un archivo Excel
             v = 1
-            while Path(f'C://Users//{os.getlogin()}//Downloads//licitaciones - {date.today().strftime('%d-%m-%Y')} - {v}.xlsx').exists():
+            while Path(
+                f"C://Users//{os.getlogin()}//Downloads//licitaciones - {date.today().strftime('%d-%m-%Y')} - {v}.xlsx"
+            ).exists():
                 v += 1
-            archivo_salida = Path(f'C://Users//{os.getlogin()}//Downloads//licitaciones - {date.today().strftime('%d-%m-%Y')} - {v}.xlsx')
+            archivo_salida = Path(
+                f"C://Users//{os.getlogin()}//Downloads//licitaciones - {date.today().strftime('%d-%m-%Y')} - {v}.xlsx"
+            )
 
             wb.save(archivo_salida)
             logger.info(f"Archivo guardado: {archivo_salida}")
@@ -212,7 +217,9 @@ def main():
         logger.error(
             f"Error en el proceso principal: {e} | traceback: {traceback.format_exc()}"
         )
-        logger.info("Ocurrió un error durante el proceso. Revisa el log para más detalles.")
+        logger.info(
+            "Ocurrió un error durante el proceso. Revisa el log para más detalles."
+        )
 
 
 if __name__ == "__main__":
