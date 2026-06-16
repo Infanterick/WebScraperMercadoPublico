@@ -97,7 +97,14 @@ def manejo_datos() -> tuple[pd.DataFrame, pd.DataFrame]:
         )
 
         # Eliminar columnas innecesarias (columnas en posición 2, 7, 8, 11-13 en indexación 0-based)
-        licitaciones = licitaciones.drop(licitaciones.columns[[0, 3, 8, 12]], axis=1)
+        #licitaciones = licitaciones.drop(licitaciones.columns[[0, 3, 8, 12]], axis=1)
+        columnas = []
+        
+        for col in licitaciones.columns:
+            if not col.startswith("Unnamed"):
+                columnas.append(col)
+        
+        licitaciones = licitaciones[columnas]
 
         # Cambiar nombre de columnas (Eliminar acentos)
         licitaciones.columns = [remove_accents(col) for col in licitaciones.columns]
